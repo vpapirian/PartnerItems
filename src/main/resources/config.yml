@@ -1,0 +1,147 @@
+# Shared cooldown between every partner item, in seconds
+global-cooldown: 10
+
+# Partner items can't be used inside these squares around each world's spawn.
+# If an HCF core registers its own ZoneProvider service, that is used instead.
+spawn-protection:
+  world: 100
+
+# Optional. Keeps cooldowns and restrictions in sync across servers / restarts.
+redis:
+  enabled: false
+  host: localhost
+  port: 6379
+  password: ''
+  key-prefix: 'partneritems:cd:'
+
+items:
+  switcher:
+    enabled: true
+    material: SNOW_BALL
+    name: '&b&lSwitcher'
+    lore:
+      - '&7Hit a player to swap places with them.'
+    cooldown: 15
+    range: 8
+
+  ninja-star:
+    enabled: true
+    material: NETHER_STAR
+    name: '&5&lNinja Star'
+    lore:
+      - '&7Teleport to the last player who hit you.'
+    cooldown: 90
+    last-hit-window: 15
+    delay: 3
+
+  anti-pearl:
+    enabled: true
+    material: SLIME_BALL
+    name: '&a&lAnti-Pearl'
+    lore:
+      - '&7Hit a player to block their pearls.'
+    cooldown: 60
+    duration: 15
+
+  anti-build:
+    enabled: true
+    material: BONE
+    name: '&f&lAnti-Build Bone'
+    lore:
+      - '&7Hit a player 3 times to stop them building.'
+    cooldown: 60
+    hits-required: 3
+    hit-window: 5
+    duration: 15
+
+  strength:
+    enabled: true
+    material: BLAZE_POWDER
+    name: '&c&lStrength Portable'
+    lore:
+      - '&7Right click for a burst of strength.'
+    cooldown: 60
+    # TYPE:amplifier:seconds
+    effects:
+      - 'INCREASE_DAMAGE:1:5'
+
+  resistance:
+    enabled: true
+    material: IRON_INGOT
+    name: '&7&lResistance Portable'
+    lore:
+      - '&7Right click for a burst of resistance.'
+    cooldown: 60
+    effects:
+      - 'DAMAGE_RESISTANCE:2:5'
+
+  rocket:
+    enabled: true
+    material: FIREWORK
+    name: '&6&lRocket'
+    lore:
+      - '&7Launch yourself into the air.'
+      - '&7Your next fall is free.'
+    cooldown: 45
+    vertical-power: 1.6
+    forward-power: 1.2
+
+  freezer:
+    enabled: true
+    material: PACKED_ICE
+    name: '&3&lFreezer'
+    lore:
+      - '&7Hit a player to slow and weaken them.'
+    cooldown: 45
+    effects:
+      - 'SLOW:1:5'
+      - 'WEAKNESS:0:5'
+
+messages:
+  prefix: '&8[&bPartner&8] '
+  no-permission: '{prefix}&cYou don''t have permission to do that.'
+  safezone: '{prefix}&cYou can''t use partner items in a safe zone.'
+  target-safezone: '{prefix}&cThat player is in a safe zone.'
+  global-cooldown: '{prefix}&cYou''re on partner item cooldown for &l{time}&c.'
+  item-cooldown: '{prefix}&cYou can''t use {item} &cfor another &l{time}&c.'
+  item-used: '{prefix}&eYou used {item}&e.'
+
+  switcher-out-of-range: '{prefix}&cThat player was too far away to switch with.'
+  switcher-switched: '{prefix}&eYou switched places with &f{player}&e.'
+  switcher-victim: '{prefix}&f{player} &eswitched places with you.'
+
+  ninja-star-no-target: '{prefix}&cNobody has hit you in the last {seconds} seconds.'
+  ninja-star-offline: '{prefix}&cThe last player who hit you isn''t around anymore.'
+  ninja-star-teleporting: '{prefix}&eTeleporting to &f{player} &ein &f{seconds}s&e...'
+  ninja-star-incoming: '{prefix}&c&l{player} &cis teleporting to you in &l{seconds}s&c!'
+  ninja-star-cancelled: '{prefix}&cYour Ninja Star teleport was cancelled.'
+
+  anti-pearl-hit: '{prefix}&eYou blocked &f{player}&e''s pearls for &f{seconds}s&e.'
+  anti-pearl-victim: '{prefix}&cYour pearls are blocked for &l{seconds}s&c.'
+  anti-pearl-blocked: '{prefix}&cYou can''t pearl for another &l{time}&c.'
+
+  anti-build-progress: '{prefix}&eHit &f{player} &e(&f{hits}&e/&f{required}&e)'
+  anti-build-hit: '{prefix}&eYou stopped &f{player} &efrom building for &f{seconds}s&e.'
+  anti-build-victim: '{prefix}&cYou can''t build for &l{seconds}s&c.'
+  anti-build-blocked: '{prefix}&cYou can''t build or interact for another &l{time}&c.'
+
+  freezer-hit: '{prefix}&eYou froze &f{player}&e.'
+  freezer-victim: '{prefix}&cYou were frozen by &l{player}&c.'
+
+  command-usage:
+    - '&b&lPartnerItems'
+    - '&f/pi give <player> <item|all> [amount]'
+    - '&f/pi list'
+    - '&f/pi cooldowns [player]'
+    - '&f/pi resetcd <player>'
+    - '&f/pi reload'
+  player-not-found: '{prefix}&cPlayer not found.'
+  unknown-item: '{prefix}&cUnknown item. Try /pi list'
+  invalid-amount: '{prefix}&cAmount has to be between 1 and 64.'
+  given: '{prefix}&eGave &f{amount}x {item} &eto &f{player}&e.'
+  list-header: '{prefix}&eItems: {items}'
+  cooldowns-header: '{prefix}&eCooldowns for &f{player}&e:'
+  cooldowns-entry: '&7 - {item}&7: &f{time}'
+  cooldowns-none: '{prefix}&eNo active cooldowns.'
+  cooldowns-reset: '{prefix}&eReset all cooldowns for &f{player}&e.'
+  reloaded: '{prefix}&aConfig reloaded.'

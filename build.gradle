@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.0'
+}
+
+group = 'com.partneritems'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+    implementation 'redis.clients:jedis:5.1.0'
+
+    testImplementation 'junit:junit:4.13.2'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 8
+}
+
+processResources {
+    filesMatching('plugin.yml') {
+        expand(version: project.version)
+    }
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    relocate 'redis.clients', 'com.partneritems.libs.jedis'
+    relocate 'org.apache.commons.pool2', 'com.partneritems.libs.pool2'
+    relocate 'com.google.gson', 'com.partneritems.libs.gson'
+    relocate 'org.json', 'com.partneritems.libs.json'
+}
+
+build.dependsOn shadowJar

@@ -1,0 +1,16 @@
+name: PartnerItems
+version: '${version}'
+main: com.partneritems.PartnerItemsPlugin
+author: vpapirian
+description: HCF partner items with configurable abilities and cooldowns
+
+commands:
+  partneritem:
+    description: Partner item commands
+    aliases: [pi, partneritems]
+
+permissions:
+  partneritems.admin:
+    default: op
+  partneritems.cooldowns:
+    default: true
